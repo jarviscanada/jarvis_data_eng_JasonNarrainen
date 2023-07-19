@@ -19,19 +19,19 @@ hostname=$(hostname -f)
 
 lscpu_out=$(lscpu)
 
-get_second_field "$lscpu_out", "^CPU(s):" 2
+get_second_field "$lscpu_out" "^CPU(s):"
 cpu_number="$func_result"
 
-get_second_field "$lscpu_out" "^Architecture:" 2
+get_second_field "$lscpu_out" "^Architecture:"
 cpu_architecture="$func_result"
 
-get_second_field "$lscpu_out" "^Model name:" 2
+get_second_field "$lscpu_out" "^Model name:"
 cpu_model="$func_result"
 
-get_second_field "$lscpu_out" "^CPU MHz:" 2
+get_second_field "$lscpu_out" "^CPU MHz:"
 cpu_mhz="$func_result"
 
-get_second_field "$lscpu_out" "^L2 cache" 2
+get_second_field "$lscpu_out" "^L2 cache"
 l2_cache=$(echo "$func_result" | rev | cut -c 2- | rev)
 
 timestamp="$(date -u '+%Y-%m-%d %H:%M:%S')"
