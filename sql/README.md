@@ -1,5 +1,10 @@
 # Introduction
-
+This project is a learning exercise for PostgreSQL found on 
+https://pgexercises.com/. It consists of a file for creating the database and 
+tables, and populating them with data. These are the questions and the answers which can be 
+used as a guideline for various SQL commands for those who need a refresher on 
+SQL or those who are learning for the first time. This project uses the 
+PostgreSQL flavour of SQL.
 # SQL Queries
 
 ##### Table Setup (DDL)
