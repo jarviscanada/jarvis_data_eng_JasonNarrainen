@@ -4,9 +4,12 @@ import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class JavaGrepImp implements JavaGrep{
 
@@ -36,27 +39,61 @@ public class JavaGrepImp implements JavaGrep{
 
     @Override
     public void process() throws IOException {
+        List<File> filesToSearch = listFiles(this.rootPath);
+        List<String> matchedLines = new ArrayList<>();
 
+        for (File file : filesToSearch) {
+            List<String> lines = readLines(file);
+            for (String line : lines) {
+                if (containsPattern(line)) {
+                    matchedLines.add(line);
+                }
+            }
+        }
+        writeToFile(matchedLines);
     }
 
     @Override
     public List<File> listFiles(String rootDir) {
-        return null;
+        List<File> fileList = new LinkedList<>();
+        File rootFile = new File(rootDir);
+        File[] files = rootFile.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    fileList.addAll(listFiles(file.getPath()));
+                }
+                fileList.add(file);
+            }
+        }
+        return fileList;
     }
 
     @Override
     public List<String> readLines(File inputFile) {
-        return null;
+        List<String> lines = new LinkedList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile.getPath()));
+            reader.lines().forEach(lines::add);
+        } catch (Exception e) {
+            this.logger.error("Error reading file", e);
+        }
+        return lines;
     }
 
     @Override
     public boolean containsPattern(String line) {
-        return false;
+        return Pattern.matches(this.regex, line);
     }
 
     @Override
     public void writeToFile(List<String> lines) throws IOException {
-
+        FileWriter fw = new FileWriter(outFile);
+        BufferedWriter bw = new BufferedWriter( fw );
+        for (String line : lines) {
+            bw.write(line);
+        }
+        bw.close();
     }
 
     @Override
