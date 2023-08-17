@@ -1,5 +1,6 @@
 package ca.jrvs.apps.grep;
 
+import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,25 @@ public class JavaGrepLambdaImp implements JavaGrep{
     private String regex;
     private String rootPath;
     private String outFile;
+
+    public static void main(String[] args) {
+        if (args.length != 3) {
+            throw new IllegalArgumentException("USAGE: JavaGrep regex rootPath outFile");
+        }
+
+        BasicConfigurator.configure();
+
+        JavaGrepLambdaImp javaGrepImp = new JavaGrepLambdaImp();
+        javaGrepImp.setRegex(args[0]);
+        javaGrepImp.setRootPath(args[1]);
+        javaGrepImp.setOutFile(args[2]);
+
+        try {
+            javaGrepImp.process();
+        } catch (Exception e) {
+            javaGrepImp.logger.error("Error: Unable to process", e);
+        }
+    }
 
     @Override
     public void process() throws IOException {
@@ -40,7 +60,7 @@ public class JavaGrepLambdaImp implements JavaGrep{
                     .map(Path::toFile)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+            logger.error("Error listing files", e);
         }
         return fileList;
     }
@@ -70,6 +90,7 @@ public class JavaGrepLambdaImp implements JavaGrep{
             try {
                 bw.write(line);
             } catch (IOException e) {
+                logger.error("Error writing to file");
                 throw new RuntimeException(e);
             }
         });

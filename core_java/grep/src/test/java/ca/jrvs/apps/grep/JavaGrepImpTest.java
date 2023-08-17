@@ -15,7 +15,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class JavaGrepImpTest {
 
@@ -108,7 +107,7 @@ public class JavaGrepImpTest {
 
     @Test
     public void processTest() {
-        JavaGrepImp javaGrepImp = new JavaGrepImp();
+        JavaGrepLambdaImp javaGrepImp = new JavaGrepLambdaImp();
         javaGrepImp.setRootPath(directoryChildPath.toFile().getPath());
         javaGrepImp.setRegex("[a-zA-Z0-9]{4}");
         javaGrepImp.setOutFile(filePath3.toFile().getPath());
