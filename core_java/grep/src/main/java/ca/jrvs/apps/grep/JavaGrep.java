@@ -41,16 +41,4 @@ public interface JavaGrep {
      * @throws IOException if write failed
      */
     void writeToFile(List<String> lines) throws IOException;
-
-    String getRootPath();
-
-    void setRootPath(String rootPath);
-
-    String getRegex();
-
-    void setRegex(String regex);
-
-    String getOutFile();
-
-    void setOutFile(String outFile);
 }

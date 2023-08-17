@@ -5,11 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JavaGrepImp implements JavaGrep{
 
@@ -63,7 +64,9 @@ public class JavaGrepImp implements JavaGrep{
                 if (file.isDirectory()) {
                     fileList.addAll(listFiles(file.getPath()));
                 }
-                fileList.add(file);
+                if (Files.isRegularFile(file.toPath())) {
+                    fileList.add(file);
+                }
             }
         }
         return fileList;
@@ -96,32 +99,26 @@ public class JavaGrepImp implements JavaGrep{
         bw.close();
     }
 
-    @Override
     public String getRootPath() {
         return this.rootPath;
     }
 
-    @Override
     public void setRootPath(String rootPath) {
         this.rootPath = rootPath;
     }
 
-    @Override
     public String getRegex() {
         return this.regex;
     }
 
-    @Override
     public void setRegex(String regex) {
         this.regex = regex;
     }
 
-    @Override
     public String getOutFile() {
         return this.outFile;
     }
 
-    @Override
     public void setOutFile(String outFile) {
         this.outFile = outFile;
     }

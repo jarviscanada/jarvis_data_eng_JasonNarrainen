@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class JavaGrepImpTest {
 
@@ -22,6 +24,7 @@ public class JavaGrepImpTest {
     Path filePath1;
     Path filePath2;
     Path filePath3;
+    List<File> files;
 
     @Before
     public void setup() {
@@ -31,6 +34,10 @@ public class JavaGrepImpTest {
             filePath1 = Files.createTempFile(directoryChildPath,"testFile1_", ".txt");
             filePath2 = Files.createTempFile(directoryRootPath,"testFile2_", ".txt");
             filePath3 = Files.createTempFile(directoryChildPath,"testFile3_", ".txt");
+            files = new ArrayList<>();
+            files.add(filePath1.toFile());
+            files.add(filePath2.toFile());
+            files.add(filePath3.toFile());
             FileWriter fw1 = new FileWriter(filePath1.toFile());
             BufferedWriter bw1 = new BufferedWriter( fw1 );
             bw1.write( "content for file1\n" + "Testing\n" + "the\n" + "test");
@@ -62,15 +69,30 @@ public class JavaGrepImpTest {
     @Test
     public void listFilesTest() {
         JavaGrepImp javaGrepImp = new JavaGrepImp();
-
         List<File> fileList = javaGrepImp.listFiles(directoryRootPath.toFile().getPath());
-        Assertions.assertNotNull(fileList);
+        Assertions.assertEquals(fileList.size(), files.size());
+        Assertions.assertTrue(fileList.containsAll(files));
+    }
+
+    @Test
+    public void listFilesLambdaTest() {
+        JavaGrep javaGrepLambda = new JavaGrepLambdaImp();
+        List<File> fileList = javaGrepLambda.listFiles(directoryRootPath.toFile().getPath());
+        fileList.forEach(e -> System.out.println(e.getPath()));
+        Assertions.assertEquals(fileList.size(), files.size());
+        Assertions.assertTrue(fileList.containsAll(files));
     }
 
     @Test
     public void readLinesTest() {
         JavaGrepImp javaGrepImp = new JavaGrepImp();
+        List<String> lines = javaGrepImp.readLines(filePath1.toFile());
+        Assertions.assertEquals(lines.size(), 4);
+    }
 
+    @Test
+    public void readLinesLambdaTest() {
+        JavaGrep javaGrepImp = new JavaGrepLambdaImp();
         List<String> lines = javaGrepImp.readLines(filePath1.toFile());
         Assertions.assertEquals(lines.size(), 4);
     }
