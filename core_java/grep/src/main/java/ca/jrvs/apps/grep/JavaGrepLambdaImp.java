@@ -89,6 +89,7 @@ public class JavaGrepLambdaImp implements JavaGrep{
         lines.forEach(line -> {
             try {
                 bw.write(line);
+                bw.newLine();
             } catch (IOException e) {
                 logger.error("Error writing to file");
                 throw new RuntimeException(e);

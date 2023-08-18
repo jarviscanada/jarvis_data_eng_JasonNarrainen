@@ -121,4 +121,21 @@ public class JavaGrepImpTest {
             Assertions.fail(e);
         }
     }
+
+    @Test
+    public void processTest2() {
+        JavaGrepLambdaImp javaGrepImp = new JavaGrepLambdaImp();
+        javaGrepImp.setRootPath("./data");
+        javaGrepImp.setRegex(".*Romeo.*Juliet.*");
+        javaGrepImp.setOutFile("./out/grep.txt");
+
+        try {
+
+            Assertions.assertEquals(Files.size(filePath3), 0);
+            javaGrepImp.process();
+            Assertions.assertNotEquals(Files.size(Paths.get("./out/grep.txt")), 0);
+        } catch (IOException e) {
+            Assertions.fail(e);
+        }
+    }
 }
